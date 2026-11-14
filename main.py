@@ -113,15 +113,15 @@ def main():
     target = out_dir / "entry.png"
     target.write_bytes(data)
 
-    same = hashlib.sha256(target.read_bytes()).digest() == \
-        hashlib.sha256(data).digest()
+    digest = hashlib.sha256(data).hexdigest()
+    same = hashlib.sha256(target.read_bytes()).hexdigest() == digest
     if not same:
         print("error: output copy differs from the bundled image",
               file=sys.stderr)
         return 1
 
-    print("wrote %s (%s, %dx%d, %d bytes)"
-          % (target, kind, width, height, len(data)))
+    print("wrote %s (%s, %dx%d, %d bytes, sha256 %s)"
+          % (target, kind, width, height, len(data), digest[:16]))
     return 0
 
 
